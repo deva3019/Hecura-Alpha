@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HECURA | Central Command (L5)</title>
+    <link rel="icon" type="image/png" href="logo.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;500;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        hecura: { dark: '#05010a', purple: '#6d28d9', neon: '#d8b4fe', success: '#00ff9d' }
+                    },
+                    fontFamily: {
+                        orbitron: ['Orbitron', 'sans-serif'],
+                        rajdhani: ['Rajdhani', 'sans-serif'],
+                        mono: ['Share Tech Mono', 'monospace'],
+                    },
+                    animation: {
+                        'spin-slow': 'spin 3s linear infinite',
+                        'flash': 'pulse 0.5s cubic-bezier(0.4, 0, 0.6, 1) 2',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .cyber-grid {
+            background-image: linear-gradient(to right, rgba(109, 40, 217, 0.05) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(109, 40, 217, 0.05) 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+        .glass-panel {
+            background: rgba(10, 5, 20, 0.7);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(139, 92, 246, 0.15);
+            box-shadow: 0 0 30px rgba(0,0,0,0.5);
+        }
+        .terminal-window {
+            background: #000;
+            border: 1px solid #333;
+            font-family: 'Share Tech Mono', monospace;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.8);
+        }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #05010a; }
+        ::-webkit-scrollbar-thumb { background: #4c1d95; border-radius: 3px; }
+        
+        /* Table Sticky Header Adjustment */
+        thead th { position: sticky; top: 0; z-index: 20; }
+    </style>
+</head>
+<body class="bg-hecura-dark text-white font-rajdhani min-h-screen relative flex flex-col overflow-hidden">
+
+    <div class="fixed inset-0 cyber-grid pointer-events-none z-0"></div>
+    <div class="fixed top-0 right-0 w-[500px] h-[500px] bg-purple-900/20 rounded-full blur-[100px] pointer-events-none"></div>
+
+    <nav class="relative z-20 border-b border-purple-900/30 bg-black/40 backdrop-blur-md flex-none h-16">
+        <div class="max-w-[98%] mx-auto px-6 h-full flex justify-between items-center">
+            <div class="flex items-center gap-4">
+                <div class="w-8 h-8 bg-purple-600 rounded flex items-center justify-center font-bold font-orbitron">L5</div>
+                <h1 class="text-xl font-orbitron font-bold tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-white to-purple-400">
+                    CENTRAL COMMAND
+                </h1>
+            </div>
+            <div class="flex items-center gap-4">
+                <div id="statusIndicator" class="flex items-center gap-2 px-3 py-1 rounded bg-green-900/20 border border-green-500/30 text-green-400 text-xs font-mono hidden">
+                    <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div> SYSTEM ACTIVE
+                </div>
+                <a href="index.html" class="text-gray-500 hover:text-white transition"><i class="fas fa-power-off"></i></a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="relative z-10 p-6 grid grid-cols-1 lg:grid-cols-12 gap-6 h-[calc(100vh-64px)] overflow-hidden">
+
+        <div class="lg:col-span-4 flex flex-col gap-6 h-full overflow-hidden">
+            
+            <div class="glass-panel p-6 rounded-xl border-l-4 border-purple-500 relative overflow-hidden group flex-none">
+                <div class="absolute inset-0 bg-purple-900/10 translate-y-full group-hover:translate-y-0 transition duration-500 pointer-events-none"></div>
+                
+                <h2 class="text-lg font-orbitron font-bold mb-2 text-purple-300">DATA INGESTION</h2>
+                <p class="text-xs text-gray-400 mb-6 font-mono">Drag & Drop JSON files from Coordinator Terminals (L1-L4).</p>
+
+                <label id="dropZone" class="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-gray-600 rounded-lg cursor-pointer hover:border-purple-400 hover:bg-black/40 transition relative">
+                    <div class="text-center z-10 transition-transform duration-300 group-hover:scale-110">
+                        <i class="fas fa-satellite-dish text-4xl text-gray-600 mb-3 group-hover:text-purple-400 transition"></i>
+                        <p class="text-sm font-bold text-gray-300">INITIATE UPLOAD</p>
+                        <p class="text-[10px] text-gray-500 mt-1">Supports Multiple .JSON Files</p>
+                    </div>
+                    <input type="file" id="fileInput" class="hidden" accept=".json" multiple onchange="handleFiles(this.files)">
+                    
+                    <div id="uploadSuccessOverlay" class="absolute inset-0 bg-green-900/90 flex items-center justify-center opacity-0 pointer-events-none transition duration-300">
+                        <div class="text-center">
+                            <i class="fas fa-check-circle text-5xl text-white mb-2 animate-bounce"></i>
+                            <p class="text-white font-bold font-mono">UPLOAD COMPLETE</p>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="glass-panel p-6 rounded-xl flex-grow flex flex-col min-h-0">
+                <h2 class="text-lg font-orbitron font-bold mb-4 text-gray-300">DB METRICS</h2>
+                
+                <div class="grid grid-cols-2 gap-4 mb-6 flex-none">
+                    <div class="bg-black/50 p-4 rounded border border-gray-800 text-center">
+                        <div class="text-4xl font-mono font-bold text-white" id="totalMerged">0</div>
+                        <div class="text-[10px] text-gray-500 uppercase mt-1">Total Records</div>
+                    </div>
+                    <div class="bg-black/50 p-4 rounded border border-gray-800 text-center">
+                        <div class="text-xl font-mono font-bold text-purple-400" id="lastAction">--</div>
+                        <div class="text-[10px] text-gray-500 uppercase mt-1">Last Action</div>
+                    </div>
+                </div>
+
+                <div class="flex-grow terminal-window rounded p-3 overflow-y-auto text-xs text-green-500/80 space-y-1 custom-scrollbar min-h-0" id="systemLog">
+                    <div>> SYSTEM_INIT... OK</div>
+                    <div>> WAITING_FOR_DATA_STREAM...</div>
+                </div>
+
+                <button onclick="clearMasterData()" class="mt-4 flex-none w-full py-2 bg-red-900/10 hover:bg-red-900/30 border border-red-900/30 text-red-500 text-xs font-bold uppercase rounded transition">
+                    <i class="fas fa-trash-alt mr-2"></i> Purge Database
+                </button>
+            </div>
+        </div>
+
+        <div class="lg:col-span-8 glass-panel p-6 rounded-xl border-t-4 border-blue-500 flex flex-col h-full overflow-hidden">
+            
+            <div class="flex-none flex justify-between items-end mb-6 border-b border-gray-800 pb-4">
+                <div>
+                    <h2 class="text-2xl font-orbitron font-bold text-blue-400">DISTRIBUTION HUB</h2>
+                    <p class="text-sm text-gray-400 mt-1">Filter Master Data & Export Sanitized Lists</p>
+                </div>
+                <div class="text-right">
+                    <div class="text-xs text-gray-500 uppercase">Filtered Count</div>
+                    <div id="eventCount" class="text-3xl font-mono font-bold text-white">0</div>
+                </div>
+            </div>
+
+            <div class="flex-none grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                <div class="md:col-span-2">
+                    <label class="block text-[10px] text-blue-400 font-bold uppercase tracking-widest mb-2">Select Target Event</label>
+                    <select id="eventSelector" onchange="filterByEvent()" class="w-full bg-black/50 border border-gray-700 text-white p-3 rounded hover:border-blue-500 focus:border-blue-500 focus:outline-none transition font-mono">
+                        <option value="" disabled selected>-- SELECT EVENT MODULE --</option>
+                    </select>
+                </div>
+                <div class="flex items-end">
+                    <div class="w-full bg-blue-900/10 border border-blue-500/20 p-2 rounded text-xs text-blue-300 text-center">
+                        <i class="fas fa-shield-alt mr-1"></i> Privacy Mode: <span class="font-bold text-white">ON</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex-grow overflow-y-auto min-h-0 bg-black/30 rounded border border-gray-800 mb-6 custom-scrollbar relative shadow-inner">
+                <table class="w-full text-left text-sm whitespace-nowrap">
+                    <thead class="bg-gray-900 text-gray-400 font-mono text-xs uppercase">
+                        <tr>
+                            <th class="p-3 bg-gray-900/95 backdrop-blur shadow-sm">ID</th>
+                            <th class="p-3 bg-gray-900/95 backdrop-blur shadow-sm">Name</th>
+                            <th class="p-3 bg-gray-900/95 backdrop-blur shadow-sm">Phone (Exported)</th>
+                            <th class="p-3 bg-gray-900/95 backdrop-blur shadow-sm">College</th>
+                            <th class="p-3 bg-gray-900/95 backdrop-blur shadow-sm text-center">Other Events</th>
+                        </tr>
+                    </thead>
+                    <tbody id="previewBody" class="divide-y divide-gray-800 font-mono text-xs">
+                        <tr><td colspan="5" class="p-10 text-center text-gray-600 italic">Select an event to load data stream...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="flex-none grid grid-cols-2 gap-4 mt-auto border-t border-gray-800/50 pt-4">
+                <button onclick="exportFilteredJSON()" id="btnJson" disabled class="disabled:opacity-30 disabled:cursor-not-allowed group relative overflow-hidden py-4 bg-gradient-to-r from-purple-700 to-blue-700 text-white font-bold font-orbitron tracking-wider rounded shadow-lg transition transform hover:scale-[1.01]">
+                    <div class="absolute inset-0 bg-white/10 group-hover:translate-x-full transition duration-500"></div>
+                    <span class="relative z-10 flex items-center justify-center gap-3">
+                        <i class="fas fa-file-code"></i> EXPORT SANITIZED JSON
+                    </span>
+                </button>
+
+                <button onclick="exportFilteredExcel()" id="btnExcel" disabled class="disabled:opacity-30 disabled:cursor-not-allowed group py-4 bg-green-900/20 border border-green-500/30 text-green-400 font-bold font-orbitron tracking-wider rounded hover:bg-green-900/40 transition">
+                    <span class="flex items-center justify-center gap-3">
+                        <i class="fas fa-file-excel"></i> EXPORT EXCEL LIST
+                    </span>
+                </button>
+            </div>
+            
+            <p class="text-[10px] text-gray-500 text-center mt-2 flex-none">
+                *Sanitized JSON exports exclude non-relevant event data for privacy.
+            </p>
+
+        </div>
+    </main>
+
+    <script src="js/merge.js"></script>
+</body>
+</html>

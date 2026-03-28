@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HECURA | New Coordinator Access</title>
+    <link rel="icon" type="image/png" href="logo.png">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;500;700&display=swap" rel="stylesheet">
+    
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        hecura: {
+                            dark: '#0a0118',
+                            purple: '#5b21b6',
+                            neon: '#a78bfa',
+                        }
+                    },
+                    fontFamily: {
+                        orbitron: ['Orbitron', 'sans-serif'],
+                        rajdhani: ['Rajdhani', 'sans-serif'],
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        .cyber-grid {
+            background-size: 40px 40px;
+            background-image: linear-gradient(to right, rgba(124, 58, 237, 0.05) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(124, 58, 237, 0.05) 1px, transparent 1px);
+        }
+        .glass-panel {
+            background: rgba(17, 12, 34, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            box-shadow: 0 0 40px rgba(91, 33, 182, 0.3);
+        }
+        input:-webkit-autofill,
+        input:-webkit-autofill:hover, 
+        input:-webkit-autofill:focus {
+            -webkit-text-fill-color: white;
+            -webkit-box-shadow: 0 0 0px 1000px #0f0a1e inset;
+            transition: background-color 5000s ease-in-out 0s;
+        }
+    </style>
+</head>
+<body class="bg-hecura-dark text-white font-rajdhani h-screen flex items-center justify-center overflow-hidden relative">
+
+    <div class="absolute inset-0 cyber-grid pointer-events-none"></div>
+    <div class="absolute top-[-10%] right-[-5%] w-96 h-96 bg-purple-900 rounded-full mix-blend-screen filter blur-[128px] opacity-40 animate-pulse-slow"></div>
+    <div class="absolute bottom-[-10%] left-[-5%] w-96 h-96 bg-blue-900 rounded-full mix-blend-screen filter blur-[128px] opacity-40 animate-pulse-slow"></div>
+
+    <div class="relative z-10 w-full max-w-lg px-6" data-aos="zoom-in" data-aos-duration="1000">
+        
+        <div class="text-center mb-8">
+            <img src="logo.png" alt="Hecura Logo" class="h-16 w-auto mx-auto mb-4 drop-shadow-[0_0_15px_rgba(139,92,246,0.8)]">
+            <h1 class="text-3xl font-orbitron font-bold tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-purple-300 to-blue-300">
+                SYSTEM ACCESS
+            </h1>
+            <p class="text-gray-400 text-sm mt-2">Create New Coordinator Profile</p>
+        </div>
+
+        <div class="glass-panel rounded-2xl p-8 relative overflow-hidden group">
+            <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-purple-500 to-transparent transform -translate-x-full group-hover:translate-x-full transition duration-1000"></div>
+
+            <form id="signupForm" class="space-y-6">
+                
+                <div class="relative group">
+                    <label class="block text-purple-300 text-xs font-bold uppercase tracking-widest mb-2">Coordinator Name</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <svg class="h-5 w-5 text-gray-500 group-focus-within:text-purple-400 transition" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                            </svg>
+                        </div>
+                        <input type="text" id="newName" class="w-full bg-[#0f0a1e] border border-gray-700 text-white pl-10 pr-3 py-3 rounded-lg focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition shadow-inner placeholder-gray-600" placeholder="Enter Full Name" required autocomplete="off">
+                    </div>
+                </div>
+
+                <div class="relative group">
+                    <label class="block text-purple-300 text-xs font-bold uppercase tracking-widest mb-2">Set Password</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <svg class="h-5 w-5 text-gray-500 group-focus-within:text-purple-400 transition" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                            </svg>
+                        </div>
+                        <input type="password" id="newPass" class="w-full bg-[#0f0a1e] border border-gray-700 text-white pl-10 pr-3 py-3 rounded-lg focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition shadow-inner placeholder-gray-600" placeholder="••••••••" required>
+                    </div>
+                </div>
+
+                <div class="relative group">
+                    <label class="block text-purple-300 text-xs font-bold uppercase tracking-widest mb-2">Confirm Password</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <svg class="h-5 w-5 text-gray-500 group-focus-within:text-purple-400 transition" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
+                        <input type="password" id="confirmPass" class="w-full bg-[#0f0a1e] border border-gray-700 text-white pl-10 pr-3 py-3 rounded-lg focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition shadow-inner placeholder-gray-600" placeholder="••••••••" required>
+                    </div>
+                </div>
+
+                <button type="submit" class="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white font-bold py-3.5 rounded-lg shadow-[0_0_20px_rgba(124,58,237,0.5)] transform hover:scale-[1.02] transition-all duration-200 font-orbitron tracking-wider mt-4">
+                    REGISTER PROFILE
+                </button>
+            </form>
+
+            <div class="mt-6 text-center border-t border-gray-700 pt-4">
+                <p class="text-gray-500 text-sm">Already registered?</p>
+                <a href="index.html" class="inline-block mt-2 text-hecura-neon hover:text-white transition font-bold text-sm tracking-wide">
+                    &larr; BACK TO LOGIN
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init();
+
+        // Extra JS to handle password match validation locally
+        document.getElementById('signupForm').addEventListener('submit', function(e) {
+            // Note: The actual registration logic is handled in js/auth.js
+            // This is just a UI pre-check
+            const p1 = document.getElementById('newPass').value;
+            const p2 = document.getElementById('confirmPass').value;
+            
+            if (p1 !== p2) {
+                e.preventDefault();
+                alert("❌ Passwords do not match!");
+                return;
+            }
+        });
+    </script>
+
+    <script src="js/auth.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HECURA | Symposium Management System</title>
+    <link rel="icon" type="image/png" href="logo.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;500;700&display=swap" rel="stylesheet">
+    
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        hecura: {
+                            dark: '#0a0118',
+                            purple: '#5b21b6',
+                            neon: '#a78bfa',
+                            accent: '#d8b4fe'
+                        }
+                    },
+                    fontFamily: {
+                        orbitron: ['Orbitron', 'sans-serif'],
+                        rajdhani: ['Rajdhani', 'sans-serif'],
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'float': 'float 6s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0a0118; }
+        ::-webkit-scrollbar-thumb { background: #5b21b6; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #7c3aed; }
+
+        /* Dynamic Background */
+        .cyber-grid {
+            background-size: 40px 40px;
+            background-image: linear-gradient(to right, rgba(124, 58, 237, 0.05) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(124, 58, 237, 0.05) 1px, transparent 1px);
+            mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
+        }
+
+        /* Glass Effect */
+        .glass-panel {
+            background: rgba(17, 12, 34, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(139, 92, 246, 0.2);
+        }
+
+        /* Neon Glow Text */
+        .text-glow {
+            text-shadow: 0 0 10px rgba(167, 139, 250, 0.5), 0 0 20px rgba(124, 58, 237, 0.3);
+        }
+    </style>
+</head>
+<body class="bg-hecura-dark text-white font-rajdhani overflow-x-hidden selection:bg-purple-500 selection:text-white">
+
+    <div class="fixed inset-0 z-0 pointer-events-none">
+        <div class="absolute inset-0 cyber-grid"></div>
+        <div class="absolute top-0 left-1/4 w-96 h-96 bg-purple-900 rounded-full mix-blend-screen filter blur-[128px] opacity-30 animate-pulse-slow"></div>
+        <div class="absolute bottom-0 right-1/4 w-96 h-96 bg-blue-900 rounded-full mix-blend-screen filter blur-[128px] opacity-30 animate-pulse-slow"></div>
+    </div>
+
+    <nav class="fixed top-0 w-full z-50 glass-panel border-b border-white/10">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <img src="logo.png" alt="Hecura Logo" class="h-10 w-auto drop-shadow-[0_0_8px_rgba(139,92,246,0.6)]">
+                <span class="font-orbitron text-2xl font-bold tracking-wider text-white">HECURA</span>
+            </div>
+            <div class="hidden md:flex gap-8 text-lg font-medium text-gray-300">
+                <a href="#features" class="hover:text-hecura-neon transition hover:drop-shadow-lg">System Features</a>
+                <a href="#events" class="hover:text-hecura-neon transition hover:drop-shadow-lg">Events</a>
+                <a href="#workflow" class="hover:text-hecura-neon transition hover:drop-shadow-lg">Workflow</a>
+            </div>
+            <button onclick="openLoginModal()" class="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white px-6 py-2 rounded-full font-bold font-orbitron tracking-wide transition transform hover:scale-105 shadow-[0_0_15px_rgba(124,58,237,0.5)]">
+                COORD LOGIN
+            </button>
+        </div>
+    </nav>
+
+    <header class="relative z-10 min-h-screen flex flex-col justify-center items-center text-center px-4 pt-20">
+        
+        <div class="relative w-48 h-48 md:w-64 md:h-64 mb-8 animate-float" data-aos="zoom-in" data-aos-duration="1500">
+            <div class="absolute inset-0 bg-purple-600 rounded-full blur-3xl opacity-20 animate-pulse"></div>
+            <img src="logo.png" alt="Hecura Large Logo" class="relative z-10 w-full h-full object-contain drop-shadow-[0_0_30px_rgba(139,92,246,0.8)]">
+        </div>
+
+        <h1 class="text-5xl md:text-7xl font-orbitron font-black mb-4 tracking-tight" data-aos="fade-up" data-aos-delay="200">
+            <span class="text-transparent bg-clip-text bg-gradient-to-r from-white via-purple-200 to-gray-400 text-glow">
+                SYMPOSIUM 2025
+            </span>
+        </h1>
+        
+        <p class="text-xl md:text-2xl text-gray-400 max-w-2xl mb-10 font-light" data-aos="fade-up" data-aos-delay="400">
+            Advanced Distributed Registration & Result Management System.<br>
+            <span class="text-hecura-neon font-bold typing-text"></span>
+        </p>
+
+        <div class="flex gap-4 flex-col md:flex-row" data-aos="fade-up" data-aos-delay="600">
+            <button onclick="openLoginModal()" class="px-8 py-4 bg-purple-700 hover:bg-purple-600 text-white rounded-lg font-orbitron font-bold text-lg transition shadow-[0_0_20px_rgba(124,58,237,0.4)] flex items-center justify-center gap-2 group">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 group-hover:rotate-90 transition" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
+                </svg>
+                ACCESS PORTAL
+            </button>
+            <a href="#features" class="px-8 py-4 border border-purple-500/50 hover:bg-purple-500/10 text-purple-300 rounded-lg font-orbitron font-bold text-lg transition backdrop-blur-sm">
+                EXPLORE SYSTEM
+            </a>
+        </div>
+    </header>
+
+    <section class="relative z-10 bg-black/40 border-y border-white/5 backdrop-blur-sm py-8">
+        <div class="max-w-7xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+            <div class="p-4">
+                <h3 class="text-4xl font-orbitron font-bold text-white mb-1">0ms</h3>
+                <p class="text-purple-400 text-sm uppercase tracking-widest">Server Latency</p>
+            </div>
+            <div class="p-4">
+                <h3 class="text-4xl font-orbitron font-bold text-white mb-1">100%</h3>
+                <p class="text-purple-400 text-sm uppercase tracking-widest">Offline Uptime</p>
+            </div>
+            <div class="p-4">
+                <h3 class="text-4xl font-orbitron font-bold text-white mb-1">NO</h3>
+                <p class="text-purple-400 text-sm uppercase tracking-widest">Database Needed</p>
+            </div>
+            <div class="p-4">
+                <h3 class="text-4xl font-orbitron font-bold text-white mb-1">SECURE</h3>
+                <p class="text-purple-400 text-sm uppercase tracking-widest">Local Storage</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="features" class="relative z-10 py-24 px-6">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="text-4xl md:text-5xl font-orbitron font-bold text-center mb-16 text-glow" data-aos="fade-up">
+                SYSTEM <span class="text-purple-500">CAPABILITIES</span>
+            </h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="glass-panel p-8 rounded-2xl hover:-translate-y-2 transition duration-300 group" data-aos="fade-up" data-aos-delay="100">
+                    <div class="h-14 w-14 bg-purple-900/50 rounded-lg flex items-center justify-center mb-6 border border-purple-500/30 group-hover:border-purple-400 group-hover:shadow-[0_0_15px_rgba(168,85,247,0.4)] transition">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-purple-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11c0 3.517-1.009 6.799-2.753 9.571m-3.44-2.04l.054-.09A13.916 13.916 0 008 11a4 4 0 118 0c0 1.017-.07 2.019-.203 3m-2.118 6.844A21.88 21.88 0 0015.171 17m3.839 1.132c.645-2.266.99-4.659.99-7.131A8 8 0 008 4.07M3 15.364c.64-1.319 1-2.8 1-4.364 0-1.457.2-2.85.577-4.147l.413-1.405" />
+                        </svg>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-3 font-orbitron">Smart ID Generation</h3>
+                    <p class="text-gray-400 leading-relaxed">
+                        Algorithmically generates collision-free IDs (e.g., HCRL1-001) based on laptop signatures. Ensures zero duplicates across distributed systems.
+                    </p>
+                </div>
+
+                <div class="glass-panel p-8 rounded-2xl hover:-translate-y-2 transition duration-300 group" data-aos="fade-up" data-aos-delay="200">
+                    <div class="h-14 w-14 bg-blue-900/50 rounded-lg flex items-center justify-center mb-6 border border-blue-500/30 group-hover:border-blue-400 group-hover:shadow-[0_0_15px_rgba(59,130,246,0.4)] transition">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+                        </svg>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-3 font-orbitron">JSON Data Merge</h3>
+                    <p class="text-gray-400 leading-relaxed">
+                        Decentralized data collection allows coordinators to export local JSONs and merge them seamlessly into a master file via the Merge Admin.
+                    </p>
+                </div>
+
+                <div class="glass-panel p-8 rounded-2xl hover:-translate-y-2 transition duration-300 group" data-aos="fade-up" data-aos-delay="300">
+                    <div class="h-14 w-14 bg-pink-900/50 rounded-lg flex items-center justify-center mb-6 border border-pink-500/30 group-hover:border-pink-400 group-hover:shadow-[0_0_15px_rgba(236,72,153,0.4)] transition">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-pink-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-3 font-orbitron">Multi-Format Export</h3>
+                    <p class="text-gray-400 leading-relaxed">
+                        Generate instant reports. Export filtered data as JSON for system use, Excel for analysis, or PDF for official documentation.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="events" class="relative z-10 py-20 bg-gradient-to-b from-transparent to-black/80">
+        <div class="max-w-7xl mx-auto px-6">
+            <h2 class="text-4xl md:text-5xl font-orbitron font-bold text-center mb-4" data-aos="zoom-in">
+                FEATURED <span class="text-purple-500">EVENTS</span>
+            </h2>
+            <p class="text-center text-gray-400 mb-12">Showcasing the best technical and non-technical challenges</p>
+
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="p-4 border border-purple-900/50 bg-purple-900/10 rounded hover:bg-purple-900/30 transition text-center">
+                    <span class="text-purple-300 font-bold block">FRONTEND JAM</span>
+                    <span class="text-xs text-gray-500">Vibe Coding</span>
+                </div>
+                <div class="p-4 border border-purple-900/50 bg-purple-900/10 rounded hover:bg-purple-900/30 transition text-center">
+                    <span class="text-purple-300 font-bold block">TECH CLASH</span>
+                    <span class="text-xs text-gray-500">Debate</span>
+                </div>
+                <div class="p-4 border border-purple-900/50 bg-purple-900/10 rounded hover:bg-purple-900/30 transition text-center">
+                    <span class="text-purple-300 font-bold block">BGMI & FREE FIRE</span>
+                    <span class="text-xs text-gray-500">Flagship</span>
+                </div>
+                <div class="p-4 border border-purple-900/50 bg-purple-900/10 rounded hover:bg-purple-900/30 transition text-center">
+                    <span class="text-purple-300 font-bold block">SPEED KEYS</span>
+                    <span class="text-xs text-gray-500">Typing</span>
+                </div>
+                </div>
+        </div>
+    </section>
+
+    <footer class="relative z-10 py-8 border-t border-white/10 text-center">
+        <p class="text-gray-500 text-sm">
+            &copy; 2025 HECURA Symposium. Powered by Frontend-Only Architecture.
+        </p>
+        <p class="text-xs text-gray-700 mt-2">Designed for Offline Reliability.</p>
+    </footer>
+
+    <div id="loginModal" class="fixed inset-0 z-[100] hidden">
+        <div class="absolute inset-0 bg-black/80 backdrop-blur-sm transition-opacity opacity-0" id="modalBackdrop" onclick="closeLoginModal()"></div>
+        
+        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-md p-1 transition-all scale-90 opacity-0" id="modalContent">
+            <div class="absolute inset-0 bg-gradient-to-r from-purple-600 to-blue-600 rounded-2xl blur opacity-75"></div>
+            
+            <div class="relative bg-gray-900 rounded-xl p-8 border border-white/10 shadow-2xl">
+                <button onclick="closeLoginModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+
+                <div class="text-center mb-6">
+                    <h2 class="text-3xl font-orbitron font-bold text-white mb-1">SYSTEM LOGIN</h2>
+                    <p class="text-purple-400 text-sm">Identify Your Terminal</p>
+                </div>
+
+                <div id="storageWarning" class="hidden mb-4 p-3 bg-red-900/30 border border-red-500/50 rounded text-red-200 text-xs flex items-start gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                    </svg>
+                    <span><strong>WARNING:</strong> Incognito mode detected. Data will NOT save. Switch to normal mode.</span>
+                </div>
+
+                <form id="loginForm" class="space-y-4">
+                    <div>
+                        <label class="block text-gray-400 text-sm font-bold mb-2 ml-1">COORDINATOR NAME</label>
+                        <input type="text" id="coordName" class="w-full bg-black/50 border border-gray-700 text-white p-3 rounded-lg focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition placeholder-gray-600" placeholder="Ex: John Doe" required>
+                    </div>
+
+                    <div>
+                        <label class="block text-gray-400 text-sm font-bold mb-2 ml-1">LAPTOP ID (Node Key)</label>
+                        <select id="laptopNum" class="w-full bg-black/50 border border-gray-700 text-white p-3 rounded-lg focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition appearance-none" required>
+                            <option value="" disabled selected>Select Terminal ID</option>
+                            <option value="L1">L1 - Registration Alpha</option>
+                            <option value="L2">L2 - Registration Beta</option>
+                            <option value="L3">L3 - Results Core</option>
+                            <option value="L4">L4 - Events Aux</option>
+                            <option value="L5">L5 - Admin Merge</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold py-3 rounded-lg shadow-lg transform hover:scale-[1.02] transition-all duration-200 mt-2 font-orbitron tracking-wider">
+                        INITIALIZE SESSION
+                    </button>
+                </form>
+
+                <div class="mt-6 flex justify-between text-xs text-gray-500 border-t border-gray-800 pt-4">
+                    <a href="signup.html" class="hover:text-purple-400 transition">New Coordinator?</a>
+                    <a href="admin_merge.html" class="hover:text-purple-400 transition font-bold">Merge Admin Console</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({
+            once: true,
+            offset: 100,
+            duration: 800,
+        });
+    </script>
+    
+    <script src="js/auth.js"></script>
+    <script src="js/landing.js"></script>
+</body>
+</html>

@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HECURA | Coordinator Dashboard</title>
+    <link rel="icon" type="image/png" href="logo.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;500;700&display=swap" rel="stylesheet">
+    
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        hecura: {
+                            dark: '#0a0118',
+                            purple: '#5b21b6',
+                            neon: '#a78bfa',
+                            card: 'rgba(17, 12, 34, 0.8)'
+                        }
+                    },
+                    fontFamily: {
+                        orbitron: ['Orbitron', 'sans-serif'],
+                        rajdhani: ['Rajdhani', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .cyber-grid {
+            background-image: linear-gradient(to right, rgba(124, 58, 237, 0.05) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(124, 58, 237, 0.05) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+        .glass {
+            background: rgba(17, 12, 34, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(139, 92, 246, 0.2);
+        }
+        .stat-card {
+            transition: all 0.3s ease;
+        }
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px -10px rgba(139, 92, 246, 0.5);
+            border-color: rgba(139, 92, 246, 0.5);
+        }
+    </style>
+</head>
+<body class="bg-hecura-dark text-white font-rajdhani min-h-screen relative overflow-x-hidden">
+
+    <div class="fixed inset-0 cyber-grid pointer-events-none z-0"></div>
+
+    <nav class="glass sticky top-0 z-50 border-b border-purple-900/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <div class="flex items-center gap-3">
+                    <img src="logo.png" alt="Hecura" class="h-10 w-auto">
+                    <div>
+                        <h1 class="font-orbitron font-bold text-xl tracking-wider">HECURA</h1>
+                        <p class="text-[10px] text-gray-400 uppercase tracking-[0.2em]">Symposium Manager</p>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-6">
+                    <div class="hidden md:flex flex-col items-end mr-4">
+                        <span class="text-[10px] text-gray-400 uppercase">Current Terminal</span>
+                        <div id="laptopBadge" class="flex items-center gap-2 px-3 py-1 rounded bg-black border border-gray-700">
+                            <div class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+                            <span class="font-orbitron font-bold text-hecura-neon text-lg" id="displayLaptopId">--</span>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center gap-3">
+                        <div class="text-right hidden sm:block">
+                            <p class="text-sm font-bold text-white" id="displayUserName">Coordinator</p>
+                            <p class="text-xs text-purple-400">Logged In</p>
+                        </div>
+                        <button onclick="logout()" class="p-2 rounded-lg bg-red-900/20 hover:bg-red-900/50 text-red-400 border border-red-900/50 transition" title="Logout">
+                            <i class="fas fa-power-off"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        
+        <div class="mb-10">
+            <h2 class="text-3xl font-orbitron font-bold mb-2">DASHBOARD <span class="text-purple-500">OVERVIEW</span></h2>
+            <p class="text-gray-400">Real-time statistics for <span id="welcomeLaptop" class="text-white font-bold">Laptop --</span></p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+            <div class="glass stat-card p-6 rounded-2xl relative overflow-hidden group">
+                <div class="absolute right-0 top-0 p-6 opacity-10 group-hover:opacity-20 transition">
+                    <i class="fas fa-users text-6xl text-purple-500"></i>
+                </div>
+                <h3 class="text-gray-400 text-sm font-bold uppercase tracking-wider mb-2">Total Registrations</h3>
+                <p class="text-5xl font-orbitron font-bold text-white" id="statTotal">0</p>
+                <div class="mt-4 h-1 w-full bg-gray-800 rounded-full overflow-hidden">
+                    <div class="h-full bg-purple-500 w-full"></div>
+                </div>
+            </div>
+
+            <div class="glass stat-card p-6 rounded-2xl relative overflow-hidden group">
+                <div class="absolute right-0 top-0 p-6 opacity-10 group-hover:opacity-20 transition">
+                    <i class="fas fa-globe text-6xl text-blue-500"></i>
+                </div>
+                <h3 class="text-gray-400 text-sm font-bold uppercase tracking-wider mb-2">Online Mode</h3>
+                <p class="text-5xl font-orbitron font-bold text-blue-400" id="statOnline">0</p>
+                <div class="mt-4 h-1 w-full bg-gray-800 rounded-full overflow-hidden">
+                    <div id="barOnline" class="h-full bg-blue-500 w-0 transition-all duration-1000"></div>
+                </div>
+            </div>
+
+            <div class="glass stat-card p-6 rounded-2xl relative overflow-hidden group">
+                <div class="absolute right-0 top-0 p-6 opacity-10 group-hover:opacity-20 transition">
+                    <i class="fas fa-ticket-alt text-6xl text-pink-500"></i>
+                </div>
+                <h3 class="text-gray-400 text-sm font-bold uppercase tracking-wider mb-2">On-Spot Mode</h3>
+                <p class="text-5xl font-orbitron font-bold text-pink-400" id="statSpot">0</p>
+                <div class="mt-4 h-1 w-full bg-gray-800 rounded-full overflow-hidden">
+                    <div id="barSpot" class="h-full bg-pink-500 w-0 transition-all duration-1000"></div>
+                </div>
+            </div>
+        </div>
+
+        <h3 class="text-xl font-orbitron font-bold mb-6 flex items-center gap-2">
+            <i class="fas fa-rocket text-purple-500"></i> MODULES
+        </h3>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+            
+            <a href="registration.html" class="glass group p-8 rounded-2xl border border-gray-700 hover:border-purple-500 transition relative overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-br from-purple-900/20 to-transparent opacity-0 group-hover:opacity-100 transition duration-500"></div>
+                <div class="relative z-10 text-center">
+                    <div class="w-16 h-16 bg-purple-900/50 rounded-full flex items-center justify-center mx-auto mb-4 border border-purple-500/30 group-hover:scale-110 transition">
+                        <i class="fas fa-user-plus text-2xl text-purple-300"></i>
+                    </div>
+                    <h4 class="text-xl font-bold font-orbitron mb-2">Student Registration</h4>
+                    <p class="text-sm text-gray-400">Add new students, generate IDs, and assign events.</p>
+                </div>
+            </a>
+
+            <a href="results.html" class="glass group p-8 rounded-2xl border border-gray-700 hover:border-blue-500 transition relative overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-br from-blue-900/20 to-transparent opacity-0 group-hover:opacity-100 transition duration-500"></div>
+                <div class="relative z-10 text-center">
+                    <div class="w-16 h-16 bg-blue-900/50 rounded-full flex items-center justify-center mx-auto mb-4 border border-blue-500/30 group-hover:scale-110 transition">
+                        <i class="fas fa-trophy text-2xl text-blue-300"></i>
+                    </div>
+                    <h4 class="text-xl font-bold font-orbitron mb-2">Result Entry</h4>
+                    <p class="text-sm text-gray-400">Enter scores and manage winners for events.</p>
+                </div>
+            </a>
+
+            <a href="overall.html" class="glass group p-8 rounded-2xl border border-gray-700 hover:border-pink-500 transition relative overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-br from-pink-900/20 to-transparent opacity-0 group-hover:opacity-100 transition duration-500"></div>
+                <div class="relative z-10 text-center">
+                    <div class="w-16 h-16 bg-pink-900/50 rounded-full flex items-center justify-center mx-auto mb-4 border border-pink-500/30 group-hover:scale-110 transition">
+                        <i class="fas fa-file-export text-2xl text-pink-300"></i>
+                    </div>
+                    <h4 class="text-xl font-bold font-orbitron mb-2">Master List & Export</h4>
+                    <p class="text-sm text-gray-400">View all data, filter lists, and export JSON/Excel.</p>
+                </div>
+            </a>
+
+        </div>
+
+        <div class="glass rounded-2xl p-6 border border-gray-800">
+            <h3 class="text-lg font-bold font-orbitron mb-4 text-gray-300">RECENT REGISTRATIONS (This Laptop)</h3>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="text-xs text-gray-500 border-b border-gray-800">
+                            <th class="py-3 px-4">PARTICIPATION ID</th>
+                            <th class="py-3 px-4">NAME</th>
+                            <th class="py-3 px-4">COLLEGE</th>
+                            <th class="py-3 px-4">MODE</th>
+                        </tr>
+                    </thead>
+                    <tbody id="recentActivityTable" class="text-sm text-gray-300">
+                        <tr>
+                            <td colspan="4" class="py-4 text-center text-gray-600 italic">No recent activity found.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="mt-4 text-center">
+                <a href="overall.html" class="text-xs text-purple-400 hover:text-white transition uppercase font-bold tracking-widest">View Full History &rarr;</a>
+            </div>
+        </div>
+
+    </main>
+
+    <script src="js/auth.js"></script>
+    <script src="js/dashboard.js"></script>
+</body>
+</html>
